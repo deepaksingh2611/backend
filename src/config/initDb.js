@@ -9,45 +9,56 @@ const user = process.env.DB_USER || 'postgres';
 const password = process.env.DB_PASSWORD || 'postgres';
 
 async function initDatabase() {
-  console.log(`Checking PostgreSQL connection at ${host}:${port} as ${user}...`);
+  const isProduction = process.env.NODE_ENV === 'production';
+  let targetPool;
 
-  // 1. Connect to standard postgres database to ensure target DB exists
-  const adminClient = new Client({
-    host,
-    port,
-    database: 'postgres',
-    user,
-    password,
-  });
+  if (process.env.DATABASE_URL) {
+    console.log('Connecting to PostgreSQL via cloud DATABASE_URL...');
+    targetPool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: isProduction ? { rejectUnauthorized: false } : false,
+    });
+  } else {
+    console.log(`Checking PostgreSQL connection at ${host}:${port} as ${user}...`);
 
-  try {
-    await adminClient.connect();
-    const res = await adminClient.query(
-      `SELECT 1 FROM pg_database WHERE datname = $1`,
-      [dbName]
-    );
+    // 1. Connect to standard postgres database to ensure target DB exists (local dev)
+    const adminClient = new Client({
+      host,
+      port,
+      database: 'postgres',
+      user,
+      password,
+    });
 
-    if (res.rowCount === 0) {
-      console.log(`Database "${dbName}" not found. Creating it...`);
-      await adminClient.query(`CREATE DATABASE "${dbName}"`);
-      console.log(`Database "${dbName}" created successfully.`);
-    } else {
-      console.log(`Database "${dbName}" already exists.`);
+    try {
+      await adminClient.connect();
+      const res = await adminClient.query(
+        `SELECT 1 FROM pg_database WHERE datname = $1`,
+        [dbName]
+      );
+
+      if (res.rowCount === 0) {
+        console.log(`Database "${dbName}" not found. Creating it...`);
+        await adminClient.query(`CREATE DATABASE "${dbName}"`);
+        console.log(`Database "${dbName}" created successfully.`);
+      } else {
+        console.log(`Database "${dbName}" already exists.`);
+      }
+    } catch (err) {
+      console.warn(`Admin DB check note: ${err.message}. Proceeding to direct connection...`);
+    } finally {
+      await adminClient.end().catch(() => {});
     }
-  } catch (err) {
-    console.warn(`Admin DB check note: ${err.message}. Proceeding to direct connection...`);
-  } finally {
-    await adminClient.end().catch(() => {});
-  }
 
-  // 2. Connect to the target database and ensure schema is up to date
-  const targetPool = new Pool({
-    host,
-    port,
-    database: dbName,
-    user,
-    password,
-  });
+    // 2. Connect to the local target database
+    targetPool = new Pool({
+      host,
+      port,
+      database: dbName,
+      user,
+      password,
+    });
+  }
 
   try {
     // A. Users table base structure
