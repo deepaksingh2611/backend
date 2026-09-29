@@ -1,0 +1,28 @@
+{
+  "name": "cashback-reward-backend",
+  "version": "1.0.0",
+  "description": "Node.js Express backend with PostgreSQL for Cashback & Rewards App",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "tunnel": "npx cloudflared tunnel --url http://localhost:5000",
+    "init-db": "node src/config/initDb.js",
+    "view-users": "node src/scripts/viewUsers.js"
+  },
+  "keywords": [
+    "express",
+    "postgresql",
+    "cashback",
+    "auth"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^2.4.0",
+    "pg": "^8.13.1"
+  }
+}

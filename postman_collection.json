@@ -1,0 +1,189 @@
+{
+  "info": {
+    "_postman_id": "c1f7a240-8f92-4f3e-bc56-4c91a0e19901",
+    "name": "Cashback & Rewards App APIs",
+    "description": "Postman Collection for testing Node.js, Express, and PostgreSQL Auth & User Profile APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "0. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1. Check Phone Number",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phoneNumber\": \"+919876543210\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/check-phone",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "check-phone"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Send OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phoneNumber\": \"+919876543210\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/send-otp",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "send-otp"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Verify OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phoneNumber\": \"+919876543210\",\n  \"otp\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/verify-otp",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "verify-otp"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"phoneNumber\": \"+919876543210\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/signup",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "signup"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phoneNumber\": \"+919876543210\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get User Profile by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/:id",
+          "host": ["{{baseUrl}}"],
+          "path": ["users", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "usr_9261a6be55a34e85",
+              "description": "Replace with the unique User ID returned from signup or login"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Update User Profile",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Updated\",\n  \"email\": \"john.updated@example.com\",\n  \"phoneNumber\": \"+919876543210\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users/:id",
+          "host": ["{{baseUrl}}"],
+          "path": ["users", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "usr_9261a6be55a34e85",
+              "description": "Replace with the unique User ID"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    }
+  ]
+}
